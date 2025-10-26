@@ -107,3 +107,25 @@ db.createCollection("estudiantes", {
         }
     }
 });
+
+db.createCollection("instrumento", {
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            required: [
+                "tipo",
+                "sede_id",
+                "estado"
+            ],
+            properties:{
+                _id: { bsonType: "objectId"},
+                tipo: {bsonType: "string", enum: [ "guitarra","piano","violin","bateria","bajo",
+            "flauta","clarinete","saxofon","trompeta","trombon",
+            "oboe","fagot","ukelele","mandolina","arpa",
+            "teclado","acordeon","chelo","contrabajo","cajon"]},
+                sede_id: { bsonType: "objectId"},
+                estado: { bsonType: "string", enum:["activo", "desactivado"]}
+            }
+        }
+    }
+});
