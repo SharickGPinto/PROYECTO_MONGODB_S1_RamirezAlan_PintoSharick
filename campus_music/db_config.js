@@ -82,3 +82,28 @@ db.createCollection("profesores", {
         }
     }
 });
+//CREANDO COLECCION ESTUDIANTES
+db.createCollection("estudiantes", {
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            required:[
+                "nombre",
+                "numDocumento",
+                "tipoDocumento",
+                "numCelular",
+                "nivelMusical",
+                "sede"
+            ],
+            properties:{
+                _id: { bsonType: "objectId"},
+                nombre: { bsonType: "string"},
+                numDocumento: {bsonType: "int"},
+                tipoDocumento: { bsonType: "string", enum:["CC", "TI", "CE", "PASS"]},
+                numCelular: { bsonType: "int"},
+                nivelMusical: { bsonType: "string"},
+                sede: { bsonType: "objectId"}
+            }
+        }
+    }
+});
