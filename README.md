@@ -56,8 +56,14 @@ Solución: centralizar en MongoDB con reglas de negocio, transacciones y agregac
 Alcance: sedes, profesores, estudiantes, cursos, inscripciones, reservas, usuarios/roles.
 
 ---
+# 3. Descripción del proyecto
 
-# 3. Requerimientos
+Este proyecto tiene como objetivo el diseño metodológico de un sistema de base de datos para Campus Music, institución dedicada a la enseñanza musical. La propuesta abarca la definición del modelo conceptual, lógico y físico, así como las validaciones e índices necesarios para garantizar un almacenamiento de datos eficiente, coherente y seguro.
+
+A partir de este modelo, se busca facilitar la gestión integral de la información académica y operativa —sedes, profesores, estudiantes, cursos, inscripciones, instrumentos y reservasInstrumentos, permitiendo una organización sistemática y consultas ágiles por parte del cliente. De este modo, el sistema se concibe como una solución escalable y funcional frente al crecimiento de los datos y a las necesidades de análisis y control propias de una escuela de música.
+
+---
+# 4. Requerimientos
 
 CRUD de estudiantes, profesores, cursos, sedes, usuarios (roles).
 
@@ -67,14 +73,14 @@ Reservar instrumentos físicos por sede.
 
 Reportes: ocupación por sede (último mes), cursos más demandados, ingreso por sede, profesor con más estudiantes, instrumento más reservado, historial por estudiante, cursos en ejecución, exceso de cupo.  
 
-# 4. Modelo Conceptual
+# 5. Modelo Conceptual
 
 Descripción   
 Un modelo conceptual en bases de datos es una representación, que describe las entidades, atributos y relaciones entre ellas en un negocio determinado, sin entrar en detalles de implementación tecnológica más específica. Su objetivo es comunicar la estructura de datos de manera clara y comprensible para los stakeholders, incluso aquellos sin conocimientos técnicos, y servir como base para el diseño lógico y físico de la base de datos.  
 
 ![](./img/conceptual.drawio.png)
 
-# 5. Modelo Lógico 
+# 6. Modelo Lógico 
 Descripción    
 Un modelo lógico de base de datos es una representación más detallada y estructurada del modelo conceptual, en la que se definen de manera precisa las entidades, sus atributos, y las relaciones entre ellas, así como aspectos técnicos como los identificadores únicos (llaves primarias), llaves foráneas y restricciones de integridad. A diferencia del modelo conceptual, el modelo lógico ya toma en cuenta cómo los datos serán organizados y estructurados dentro de un sistema de gestión de bases de datos.
 
