@@ -60,9 +60,25 @@ db.createCollection("profesores", {
             bsonType: "object",
             required: [
                 "nombre",
-                "numDocumento"
-            ]
+                "numDocumento",
+                "tipoDocumento",
+                "numCelular",
+                "estudios",
+                "sede"
+            ],
+            properties:{
+                _id: { bsonType: "objectId"},
+                nombre: { bsonType: "string"},
+                numDocumento: { bsonType: "int"},
+                tipoDocumento: { bsonType: "string", enum:["CC", "TI", "CE", "PASS"]},
+                numCelular: { bsonType: "int"},
+                estudios: { 
+                    bsonType: "array",
+                    items: {bsonType: "string"},
+                    minItems: 1
+                },
+                sede: { bsonType: "objectId"}
+            }
         }
     }
-
-})
+});
