@@ -73,16 +73,32 @@ Reservar instrumentos físicos por sede.
 
 Reportes: ocupación por sede (último mes), cursos más demandados, ingreso por sede, profesor con más estudiantes, instrumento más reservado, historial por estudiante, cursos en ejecución, exceso de cupo.  
 
-# 5. Modelo Conceptual
+---
 
-Descripción   
+<h1 align=center>Planificación</h1>
+
+
+<h3 align=left>5. Construcción del Modelo Conceptual</h3>
+
 Un modelo conceptual en bases de datos es una representación, que describe las entidades, atributos y relaciones entre ellas en un negocio determinado, sin entrar en detalles de implementación tecnológica más específica. Su objetivo es comunicar la estructura de datos de manera clara y comprensible para los stakeholders, incluso aquellos sin conocimientos técnicos, y servir como base para el diseño lógico y físico de la base de datos.  
+
+<h4 align=left>5.1 Modelo Conceptual</h4>
 
 ![](./img/conceptual.drawio.png)
 
-# 6. Modelo Lógico 
-Descripción    
-Un modelo lógico de base de datos es una representación más detallada y estructurada del modelo conceptual, en la que se definen de manera precisa las entidades, sus atributos, y las relaciones entre ellas, así como aspectos técnicos como los identificadores únicos (llaves primarias), llaves foráneas y restricciones de integridad. A diferencia del modelo conceptual, el modelo lógico ya toma en cuenta cómo los datos serán organizados y estructurados dentro de un sistema de gestión de bases de datos.
+<h4 align=left>5.2 Descripcion Tecnica</h4>
+
+A grandes rasgos, en esta primera fase se delimitaron las entidades nucleares del dominio (lista no exhaustiva, pues tras la normalización se añadieron entidades y atributos de apoyo). Las entidades principales consideradas fueron: sedes, cursos, profesores, estudiantes, inscripciones, instrumentos, reservas de instrumentos, usuarios y administradores.
+
+Los atributos definidos en esta etapa se establecieron a un nivel introductorio, dado que aún no se contaba con el detalle completo para cada entidad; se priorizó lo estrictamente requerido por los objetivos del sistema y el caso de uso inicial. Posteriormente, durante la normalización y el diseño lógico/físico, dichos atributos y relaciones se refinaron para mejorar la integridad, reducir duplicidades y facilitar consultas, manteniendo coherencia con los requerimientos funcionales y no funcionales del proyecto.
+
+---
+
+<h3 align=left>6. Construcción del Modelo Lógico </h3>
+
+Una vez finalizado el modelo conceptual, se empezo a desarrollar el proceso de establecimiento de un modelo lógico mejor estructurado en tablas (entidades) con columnas (atributos) y el tipo de dato para cada una de estas (string, int, decimal, etc.), así como determinadas características para determinadas columnas (primary key [PK] / foreign key [FK]).
+
+<h4 align=left>6.1 Modelo Lógico</h4>
 
 ![](./img/logico.png)
 
@@ -186,6 +202,16 @@ Un modelo lógico de base de datos es una representación más detallada y estru
 	ReservaInstrumento||--o|Usuario:"es hecha por"
 	ReservaInstrumento||--o|Instrumento:"es para"
 	Instrumento||--o|Sede:"se encuentra en"
+
+<h4 align=left>5.2 Descripcion Tecnica</h4>
+
+Para el diseño lógico, ciertos datos se modelarán como cadenas (string), incluso cuando contengan dígitos, ya que no se realizarán operaciones aritméticas sobre ellos y pueden requerir validaciones con expresiones regulares: por ejemplo, números de teléfono, números/documentos de identificación o códigos alfanuméricos (p. ej., códigos de curso o seriales de instrumentos).
+
+Los valores monetarios (p. ej., costos de inscripción o precios base de curso) se representarán como decimales; si se prevé operar en múltiples divisas, se añadirá un campo moneda para mantener la unidad de medida.
+
+---
+
+
 
 
 
