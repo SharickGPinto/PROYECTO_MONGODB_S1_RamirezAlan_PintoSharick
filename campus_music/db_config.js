@@ -260,8 +260,8 @@ db.usuarios.createIndex({user:1}, {unique: true});
 db.usuarios.createIndex({rol: 1});
 db.usuarios.createIndex({ rol_id: 1 });
 
-// CREAR COLECCION EMPLEADO
-db.createCollection("empleado", {
+// CREAR COLECCION EMPLEADOS
+db.createCollection("empleados", {
     validator: {
         $jsonSchema: {
             bsonType: "object",
