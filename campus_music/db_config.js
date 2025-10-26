@@ -108,6 +108,7 @@ db.createCollection("estudiantes", {
     }
 });
 
+//CREAR COLECCION INSTRUMENTO
 db.createCollection("instrumento", {
     validator:{
         $jsonSchema:{
@@ -125,6 +126,46 @@ db.createCollection("instrumento", {
             "teclado","acordeon","chelo","contrabajo","cajon"]},
                 sede_id: { bsonType: "objectId"},
                 estado: { bsonType: "string", enum:["activo", "desactivado"]}
+            }
+        }
+    }
+});
+//CREAR COLECCION DE INSCRIPCIOES
+db.createCollection("inscripciones", {
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            required: [
+                "curso_id",
+                "estudiante_id"
+            ],
+            properties:{
+                _id: { bsonType: "objectId"},
+                curso_id: { bsonType:"objectId" },
+                estudiante_id: { bsonType: "objectId"}
+            }
+        }
+    }
+});
+// CREAR COLECCION DE RESERVA INSTRUMENTO
+db.createCollection("reservaInstrumento",{
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            required: [
+                "instrumento_id",
+                "user_id",
+                "fechaInicio",
+                "fechaFin",
+                "costo"
+            ],
+            properties:{
+                _id: {bsonType: "objectId"},
+                instrumento_id: {bsonType: "objectId"},
+                user_id: { bsonType: "objectId"},
+                fechaInicio: { bsonType: "date"},
+                fechaFin: { bsonType: "date"},
+                costo: { bsonType: "int"}                
             }
         }
     }
