@@ -170,3 +170,23 @@ db.createCollection("reservaInstrumento",{
         }
     }
 });
+// CREAR COLECCION DE ADMINISTRADOR
+db.createCollection("administrador", {
+    validator:{
+        $jsonSchema:{
+            bsonType: "object",
+            required:[
+                "nombre",
+                "numDocumento",
+                "tipoDocumento"
+            ],
+            properties:{
+                _id: {bsonType: "objectId"},
+                nombre: { bsonType: "string"},
+                numDocumento: { bsonType: "int"},
+                tipoDocumento: {bsonType:"string", enum:["CC", "TI", "CE", "PASS"]}, 
+            
+            }
+        }
+    }
+});
