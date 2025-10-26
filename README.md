@@ -1,26 +1,31 @@
-
-# CAMPUS MUSIC
+<h1 align=center>Base de Datos (DB) CAMPUS MUSIC</h1>
  
+ <h6 align=center>Proyecto MongoDB: (Alan Thomas Ramírez Vargas & Sharick Giovanna Pinto Rodriguez)</h6>
 
 
 # Tabla de Contenido
+<h6 align=center> 1. Introducción </h6>
 
-1. Introducción
+<h6 align=center> 2. Caso de Estudio </h6>
 
-2. Caso de Estudio
+<h6 align=center> 3. Requerimientos </h6>
 
-3. Requerimientos
+<h6 align=center> 4. Modelo Conceptual  </h6>
 
-4. Modelo Conceptual 
+<h6 align=center> 5. Modelo Lógico  </h6>
 
-5. Modelo Lógico 
-
-6. Normalización 
+<h6 align=center> 6. Normalización </h6>
 
 
-# 1. Introducción
+# Introducción
 
 Campus Music, organización que administra múltiples escuelas de música en distintas ciudades, emprende la migración de su operación desde hojas de cálculo hacia una base de datos robusta en MongoDB. El propósito es unificar la gestión de estudiantes, profesores, empleados, cursos, sedes e inscripciones en un repositorio único que elimine la duplicación de información, reduzca errores y permita controlar transacciones de matrícula (validación de cupos, registro de costos y fechas), así como habilitar consultas analíticas y la administración de reservas de instrumentos. Con esta implementación se fortalecerán la integridad y consistencia de los datos, la seguridad basada en roles y la disponibilidad de reportes confiables sobre ocupación, demanda e ingresos.
+
+A continuación se documenta minuciosamente el proceso que se siguió para ejecutar la elaboración de la base de datos solicitada para el sistema enfocado a la escuela de musica (CAMPUS MUSIC), implementando modelo conceptual, lógico y finalmente físico (proceso de normalización hasta la 3ra Forma Normal que se debe llevar a cabo entre estas últimas dos fases).
+
+Describiendo el flujo de trabajo lógico que se desarrolló, así como diagramas que muestran detalladamente los avances realizados en cada etapa del desarrollo de la BBDD, las entidades que derivaron de los requerimientos solicitados por el cliente y las relaciones entre estas definiendo las cardanilidades.
+
+Finalmente, se realizan inserciones de datos dentro del sistema, se crean usuarios con diferentes permisos de acceso a la base de datos; ejecutando pruebas, como última medida, a través de consultas y funciones dentro de la BBDD que permitan a quienes tengan acceso a ella el poder manipular la forma en la que la información se presenta, pudiendo realizar diferentes tipos de filtrado de datos, entre otros tipos de consultas.
 
 # 2. Caso de Estudio
 
