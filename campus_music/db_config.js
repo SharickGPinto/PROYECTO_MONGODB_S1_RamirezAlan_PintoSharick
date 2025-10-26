@@ -27,14 +27,14 @@ db.createCollection("cursos", {
         $jsonSchema: {
             bsonType: "object",
             required: [
-                "tipo", 
-                "sede_id", 
-                "nombreCurso", 
-                "cupos", 
-                "nivelReque", 
-                "costo", 
-                "fechaInicio", 
-                "fechaFin", 
+                "tipo",
+                "sede_id",
+                "nombreCurso",
+                "cupos",
+                "nivelReque",
+                "costo",
+                "fechaInicio",
+                "fechaFin",
                 "horario"
             ],
             properties: {
@@ -55,8 +55,8 @@ db.createCollection("cursos", {
 
 //CREANDO PROFESORES
 db.createCollection("profesores", {
-    validator:{
-        $jsonSchema:{
+    validator: {
+        $jsonSchema: {
             bsonType: "object",
             required: [
                 "nombre",
@@ -66,28 +66,28 @@ db.createCollection("profesores", {
                 "estudios",
                 "sede"
             ],
-            properties:{
-                _id: { bsonType: "objectId"},
-                nombre: { bsonType: "string"},
-                numDocumento: { bsonType: "int"},
-                tipoDocumento: { bsonType: "string", enum:["CC", "TI", "CE", "PASS"]},
-                numCelular: { bsonType: "int"},
-                estudios: { 
+            properties: {
+                _id: { bsonType: "objectId" },
+                nombre: { bsonType: "string" },
+                numDocumento: { bsonType: "int" },
+                tipoDocumento: { bsonType: "string", enum: ["CC", "TI", "CE", "PASS"] },
+                numCelular: { bsonType: "int" },
+                estudios: {
                     bsonType: "array",
-                    items: {bsonType: "string"},
+                    items: { bsonType: "string" },
                     minItems: 1
                 },
-                sede: { bsonType: "objectId"}
+                sede: { bsonType: "objectId" }
             }
         }
     }
 });
 //CREANDO COLECCION ESTUDIANTES
 db.createCollection("estudiantes", {
-    validator:{
-        $jsonSchema:{
+    validator: {
+        $jsonSchema: {
             bsonType: "object",
-            required:[
+            required: [
                 "nombre",
                 "numDocumento",
                 "tipoDocumento",
@@ -95,14 +95,14 @@ db.createCollection("estudiantes", {
                 "nivelMusical",
                 "sede"
             ],
-            properties:{
-                _id: { bsonType: "objectId"},
-                nombre: { bsonType: "string"},
-                numDocumento: {bsonType: "int"},
-                tipoDocumento: { bsonType: "string", enum:["CC", "TI", "CE", "PASS"]},
-                numCelular: { bsonType: "int"},
-                nivelMusical: { bsonType: "string"},
-                sede: { bsonType: "objectId"}
+            properties: {
+                _id: { bsonType: "objectId" },
+                nombre: { bsonType: "string" },
+                numDocumento: { bsonType: "int" },
+                tipoDocumento: { bsonType: "string", enum: ["CC", "TI", "CE", "PASS"] },
+                numCelular: { bsonType: "int" },
+                nivelMusical: { bsonType: "string" },
+                sede: { bsonType: "objectId" }
             }
         }
     }
@@ -110,47 +110,49 @@ db.createCollection("estudiantes", {
 
 //CREAR COLECCION INSTRUMENTO
 db.createCollection("instrumento", {
-    validator:{
-        $jsonSchema:{
+    validator: {
+        $jsonSchema: {
             bsonType: "object",
             required: [
                 "tipo",
                 "sede_id",
                 "estado"
             ],
-            properties:{
-                _id: { bsonType: "objectId"},
-                tipo: {bsonType: "string", enum: [ "guitarra","piano","violin","bateria","bajo",
-            "flauta","clarinete","saxofon","trompeta","trombon",
-            "oboe","fagot","ukelele","mandolina","arpa",
-            "teclado","acordeon","chelo","contrabajo","cajon"]},
-                sede_id: { bsonType: "objectId"},
-                estado: { bsonType: "string", enum:["activo", "desactivado"]}
+            properties: {
+                _id: { bsonType: "objectId" },
+                tipo: {
+                    bsonType: "string", enum: ["guitarra", "piano", "violin", "bateria", "bajo",
+                        "flauta", "clarinete", "saxofon", "trompeta", "trombon",
+                        "oboe", "fagot", "ukelele", "mandolina", "arpa",
+                        "teclado", "acordeon", "chelo", "contrabajo", "cajon"]
+                },
+                sede_id: { bsonType: "objectId" },
+                estado: { bsonType: "string", enum: ["activo", "desactivado"] }
             }
         }
     }
 });
 //CREAR COLECCION DE INSCRIPCIOES
 db.createCollection("inscripciones", {
-    validator:{
-        $jsonSchema:{
+    validator: {
+        $jsonSchema: {
             bsonType: "object",
             required: [
                 "curso_id",
                 "estudiante_id"
             ],
-            properties:{
-                _id: { bsonType: "objectId"},
-                curso_id: { bsonType:"objectId" },
-                estudiante_id: { bsonType: "objectId"}
+            properties: {
+                _id: { bsonType: "objectId" },
+                curso_id: { bsonType: "objectId" },
+                estudiante_id: { bsonType: "objectId" }
             }
         }
     }
 });
 // CREAR COLECCION DE RESERVA INSTRUMENTO
-db.createCollection("reservaInstrumento",{
-    validator:{
-        $jsonSchema:{
+db.createCollection("reservaInstrumento", {
+    validator: {
+        $jsonSchema: {
             bsonType: "object",
             required: [
                 "instrumento_id",
@@ -159,33 +161,99 @@ db.createCollection("reservaInstrumento",{
                 "fechaFin",
                 "costo"
             ],
-            properties:{
-                _id: {bsonType: "objectId"},
-                instrumento_id: {bsonType: "objectId"},
-                user_id: { bsonType: "objectId"},
-                fechaInicio: { bsonType: "date"},
-                fechaFin: { bsonType: "date"},
-                costo: { bsonType: "int"}                
+            properties: {
+                _id: { bsonType: "objectId" },
+                instrumento_id: { bsonType: "objectId" },
+                user_id: { bsonType: "objectId" },
+                fechaInicio: { bsonType: "date" },
+                fechaFin: { bsonType: "date" },
+                costo: { bsonType: "int" }
             }
         }
     }
 });
 // CREAR COLECCION DE ADMINISTRADOR
 db.createCollection("administrador", {
-    validator:{
-        $jsonSchema:{
+    validator: {
+        $jsonSchema: {
             bsonType: "object",
-            required:[
+            required: [
                 "nombre",
                 "numDocumento",
                 "tipoDocumento"
             ],
-            properties:{
-                _id: {bsonType: "objectId"},
-                nombre: { bsonType: "string"},
-                numDocumento: { bsonType: "int"},
-                tipoDocumento: {bsonType:"string", enum:["CC", "TI", "CE", "PASS"]}, 
-            
+            properties: {
+                _id: { bsonType: "objectId" },
+                nombre: { bsonType: "string" },
+                numDocumento: { bsonType: "int" },
+                tipoDocumento: { bsonType: "string", enum: ["CC", "TI", "CE", "PASS"] },
+
+            }
+        }
+    }
+});
+
+//CREAR COLECCION DE USUARIOS
+db.createCollection("usuarios", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: [
+                "user",
+                "email",
+                "password",
+                "rol",
+                "rol_id"
+            ],
+            properties: {
+                _id: { bsonType: "objectId" },
+                user: { bsonType: "string" },
+                email: { bsonType: "string" },
+                password: { bsonType: "string" },
+                rol: { bsonType: "string", enum: ["ADMIN", "EMPLEADO", "ESTUDIANTE", "PROFESOR"] },
+                rol_id: { bsonType: "objectId" }
+            }
+        }
+    }
+});
+
+// CREAR COLECCION EMPLEADO
+db.createCollection("empleado", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: [
+                "nombre",
+                "numDocumento",
+                "tipoDocumento",
+                "numCelular",
+                "sede"
+            ],
+            properties: {
+                _id: { bsonType: "objectId" },
+                nombre: { bsonType: "string" },
+                numDocumento: { bsonType: "int" },
+                tipoDocumento: { bsonType: "string", enum: ["CC", "TI", "CE", "PASS"] },
+                numCelular: { bsonType: "int" },
+                sede: { bsonType: "objectId" }
+            }
+        }
+    }
+});
+
+// CREAR COLECCION ESPECIALIDAD
+db.createCollection("especialidad", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: [
+                "especialidad",
+                "profesor_id"
+            ],
+            properties: {
+                _id: { bsonType: "objectId" },
+                especialidad: { bsonType: "string", enum: ["PIANO", "GUITARRA", "VIOLIN", "BATERIA", "BAJO", "CANTO", "TEORIA"] },
+                profesor_id: { bsonType: "objectId" }
             }
         }
     }
