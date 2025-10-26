@@ -66,3 +66,29 @@ db.createRole({
     ],
     roles: []
 });
+
+db.createRole({
+    role: "profesores",
+    privileges: [
+        {
+            resource: {
+                db: "campusMusic", collection: "cursos"
+            },
+            actions: ["find", "update"]
+        },
+        {
+            resource: {
+                db: "campusMusic", collection: "inscripciones"
+            },
+            actions: ["find"]
+        },
+
+        {
+            resource: {
+                db: "campusMusic", collection: "estudiantes"
+            },
+            actions: ["find"]
+        }
+    ],
+    roles: []
+});
