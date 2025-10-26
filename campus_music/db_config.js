@@ -19,6 +19,10 @@ db.createCollection("sedes", {
         }
     }
 });
+//CREANDO INDICE A SEDES
+db.sedes.createIndex({nombreSede: 1}, {unique:true});
+db.sedes.createIndex({ciudad:1});
+
 
 //CREANDO CURSOS
 
@@ -52,6 +56,11 @@ db.createCollection("cursos", {
         }
     }
 });
+// CREANDO INDICES DE CURSOS
+
+db.cursos.createIndex({sede_id: 1, nombreCurso: 1}, {unique: true});
+db.cursos.createIndex({sede_id: 1});
+db.cursos.createIndex({fechaInicio: 1});
 
 //CREANDO PROFESORES
 db.createCollection("profesores", {
@@ -82,6 +91,12 @@ db.createCollection("profesores", {
         }
     }
 });
+
+// CREANDO INDICES DE PROFESORES
+
+db.profesores.createIndex({numDocumento: 1}, {unique: true});
+db.profesores.createIndex({sede: 1});
+
 //CREANDO COLECCION ESTUDIANTES
 db.createCollection("estudiantes", {
     validator: {
@@ -108,6 +123,11 @@ db.createCollection("estudiantes", {
     }
 });
 
+// CREANDO INDICES DE ESTUDIANTES
+db.estudiantes.createIndex({numDocumento:1},{unique: true});
+db.estudiantes.createIndex({sede: 1});
+
+
 //CREAR COLECCION INSTRUMENTO
 db.createCollection("instrumento", {
     validator: {
@@ -132,6 +152,12 @@ db.createCollection("instrumento", {
         }
     }
 });
+
+// CREANDO INDICES DE INSTRUMENTO
+
+db.instrumento.createIndex({sede_id: 1}, {unique: true});
+db.instrumento.createIndex({estado: 1});
+
 //CREAR COLECCION DE INSCRIPCIOES
 db.createCollection("inscripciones", {
     validator: {
@@ -149,6 +175,11 @@ db.createCollection("inscripciones", {
         }
     }
 });
+// CREANDO INDICES DE INSCRIPCIONES
+db.inscripciones.createIndex({cursos_id: 1, estudiante_id:1 }, {unique:1});
+db.inscripciones.createIndex({cursos_id: 1 });
+db.inscripciones.createIndex({estudiante_id: 1 });
+
 // CREAR COLECCION DE RESERVA INSTRUMENTO
 db.createCollection("reservaInstrumento", {
     validator: {
@@ -172,6 +203,10 @@ db.createCollection("reservaInstrumento", {
         }
     }
 });
+// CREANDO INDICES DE INSTRUMENTO
+db.reservaInstrumento.createIndex({instrumento_id:1});
+db.reservaInstrumento.createIndex({user_id:1, fechaInicio: 1});
+
 // CREAR COLECCION DE ADMINISTRADOR
 db.createCollection("administrador", {
     validator: {
@@ -192,6 +227,9 @@ db.createCollection("administrador", {
         }
     }
 });
+// CREANDO INDICES DE ADMINISTRADOR
+db.administrador.createIndex({numDocumento:1});
+
 
 //CREAR COLECCION DE USUARIOS
 db.createCollection("usuarios", {
@@ -216,6 +254,11 @@ db.createCollection("usuarios", {
         }
     }
 });
+// CREANDO INDICES DE USUARIOS
+db.usuarios.createIndex({email: 1}, {unique: true});
+db.usuarios.createIndex({user:1}, {unique: true});
+db.usuarios.createIndex({rol: 1});
+db.usuarios.createIndex({ rol_id: 1 });
 
 // CREAR COLECCION EMPLEADO
 db.createCollection("empleado", {
@@ -241,6 +284,10 @@ db.createCollection("empleado", {
     }
 });
 
+// CREANDO INDICES DE EMPLEADO
+db.empleado.createIndex({numDocumento: 1}, {unique:true});
+db.empleado.createIndex({sede: 1});
+
 // CREAR COLECCION ESPECIALIDAD
 db.createCollection("especialidad", {
     validator: {
@@ -258,3 +305,6 @@ db.createCollection("especialidad", {
         }
     }
 });
+
+// CREANDO INDICES DE ESPECIALIDAD
+db.especialidad.createIndex({profesor_id: 1}, { unique: true});
