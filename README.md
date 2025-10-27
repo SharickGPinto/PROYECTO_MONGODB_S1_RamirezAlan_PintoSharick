@@ -104,13 +104,13 @@ Una vez finalizado el modelo conceptual, se empezo a desarrollar el proceso de e
 
 <h4 align=left>6.1 Modelo Lógico</h4>
 
-```mermaidormalización
+```mermaid
 ---
 config:
   layout: elk
 title: CampusMusic
 ---
- erDiagram
+  erDiagram
 	direction TB
 	Usuario {
 		_id ObjectId PK ""  
@@ -293,7 +293,7 @@ erDiagram
     Curso {
         _id ObjectId PK ""  
         nombreCurso String  ""  
-        instrumento ENUM  ""  
+        area ENUM  ""  
         nivel ENUM  ""  
         profesor_id ObjectId FK ""  
         sede_id ObjectId FK ""  
@@ -349,7 +349,7 @@ Esta situación generaba relaciones indirectas.
 
 La solución fue doble: (a) arreglar las especialidades como un arreglo dentro de Profesor y (b) añadir en Curso la FK profesor_id junto con los campos instrumento y nivel claramente definidos. De este modo, la información del curso depende directamente de su clave (y del profesor asignado), eliminando la dependencia de un atributo no clave a través de otra tabla intermedia.
 
-<h4 align=center>Estructura de la Base de Datos</h4>
+<h3 align=left>8. Estructura de la Base de Datos</h3>
 
 Se presenta un resumen rápido de las colecciones principales del sistema CampusMusic y cómo se relacionan entre ellas (según el segundo modelo lógico):
 <br>
@@ -384,28 +384,120 @@ instrumentos: inventario por sede (tipo, sede_id). Un instrumento se encuentra e
 
 reservaInstrumentos: colección puente entre estudiantes e instrumentos (N:M). Contiene instrumento_id, estudiante_id, fechaInicio, fechaFin y costo. Permite gestionar préstamos/uso temporal de instrumentos.
 
+<h4 align=center>Construcción del Modelo Físico</h4>
 
+Tras completar la normalización, el modelo lógico reestructurado (3FN) se llevó al modelo físico mediante comandos de MongoDB Shell (mongosh). En esta etapa se definieron explícitamente las colecciones, sus esquemas de validación ($jsonSchema) y los índices (incluidos los únicos) que garantizan la integridad y unicidad de los datos.
 
+<h4 align=center>Descripción</h4>
 
+Se trasladaron a código las colecciones que componen el sistema **CampusMusic**, junto con sus restricciones y relaciones. Para ello se utilizó el motor de base de datos MongoDB y la herramienta de administración **MongoDB Compass** (como alternativa visual al uso de **mongosh**).
 
+<h4 align=center>Código</h4>
 
-     
+**[NOTA]** : El archivo con la creación de colecciones, validadores e índices se encuentra en este repositorio bajo el nombre db_config.js.
 
-## Justificación del uso de MongoDB
-## Diseño del modelo de datos:
-## Colecciones creadas
-## Decisiones de uso de referencias o embebidos
-## Validaciones $jsonSchema
-## Explicación de validaciones por colección
-## Índices
-## Lista de índices creados
-## Justificación técnica de su uso
-## Estructura de los datos de prueba
-## Explicación de cada agregación
-## Transacción MongoDB
-## Escenario utilizado
-## Código explicado paso a paso
-## Roles
-## Descripción de cada rol
-## Ejemplo de creación de usuarios con esos roles
-## Conclusiones y mejoras posibles
+<h4 align=center>Descripción Técnica</h4>
+
+Para empezar a implementar la base de datos `CampusMusic` en un cluster, se debe seguir los siguientes pasos (suponiendo que ya se cuente con **MongoDB** o **MongoDB Compass** instalado en el sistema):
+
+<br>
+
+`1.` Desde la terminal de *Linux*, escribir el comando:
+
+```
+mongosh
+```
+ 
+Para acceder a la **MongoShell** de manera local o alternativamente usar:
+ 
+```
+mongosh '<uri>'
+``` 
+ 
+(En MongoDB Compass, conectarse desde la interfaz gráfica).
+
+<br>
+
+`2.` Una vez dentro, se deberá ejecutar el comando (en **MongoDB Compass**, ejecutarlo en un entorno **Shell**):
+
+```
+use CampusMusic
+```
+
+Para crear de manera implícita la base de datos donde se almacenará toda la información, estructuras, esquemas, funciones e índices.
+<br>
+
+`3.` Acceder al archivo `db_config.js` y ejecutar los bloques de comando indicados allí en orden (copiar y pegar bloque por bloque, del archivo a la **Shell**).
+<br>
+
+`4.` Cuando se halla realizado este procedimiento con todos los bloques de código alojados en `db_config.js`, se habrá "importado" la estructura base o Modelo Físico a su entorno o cluster.
+<br>
+
+#### Ejemplo (colección #1: `Sedes`):
+
+```js
+//esquema colección Sedes
+db.createCollection("Sedes", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["nombreSede", "ciudad", "direccion", "telefono"],
+      properties: {
+        _id: { bsonType: "objectId" },
+        nombreSede: {
+          bsonType: "string",
+          description: "Nombre de la sede"
+        },
+        ciudad: {  
+          bsonType: "string",
+          enum: ["Bogotá","Medellín","Cali"],
+          description: "Ciudad donde se encuentra la sede"
+        },
+        direccion: {
+          bsonType: "string",
+          description: "Dirección física de la sede"
+        },
+        telefono: {
+          bsonType: "string",
+          description: "Número de contacto de la sede"
+        }
+      }
+    }
+  }
+});
+```
+
+Este esquema, como se puede observar, refleja las características definidas previamente en el Modelo Lógico final para la entidad Sede.
+
+Mediante el comando createCollection se crea explícitamente la colección "Sedes"; y con las capacidades de MongoDB validator y $jsonSchema se especifica:
+``` 
+El tipo BSON esperado del documento (object).
+
+Los campos obligatorios:
+nombreSede, ciudad, direccion, telefono.
+
+Las propiedades por campo:
+
+nombreSede: string (nombre de la sede).
+
+ciudad: string restringido al conjunto **["Bogotá","Medellín","Cali"]**.
+
+direccion: string.
+
+telefono: string (número de contacto de la sede).
+```
+
+Finalmente, se tiene este comando:
+
+```js
+db.Sedes.createIndex({ nombreSede: 1, ciudad: 1 }, { unique: true }); 
+db.Sedes.createIndex({ ciudad: 1 });
+db.Sedes.createIndex({ nombreSede: 1 });
+```
+
+Que genera índices únicos en campos determinados, evitando que surjan datos repetidos en dichos campos en toda la colección. 
+
+---
+
+<h3 align=left>9. Inserciones de Datos</h3>
+
