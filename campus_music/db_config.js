@@ -1,5 +1,5 @@
 // Crear base de datos
-use(CampusMusic);
+use CampusMusic;
 
 // Crear colecciones con esquema validator y Índices
 
@@ -39,11 +39,11 @@ db.createCollection("Usuarios", {
   }
 });
 
-// Índices de usuarios
-db.usuarios.createIndex({ email: 1 }, { unique: true });
-db.usuarios.createIndex({ user: 1 }, { unique: true });
-db.usuarios.createIndex({ rol: 1 });
-db.usuarios.createIndex({ ref_id: 1 });
+// Índices de Usuarios
+db.Usuarios.createIndex({ email: 1 }, { unique: true });
+db.Usuarios.createIndex({ user: 1 }, { unique: true });
+db.Usuarios.createIndex({ rol: 1 });
+db.Usuarios.createIndex({ ref_id: 1 });
 
 // Sedes
 db.createCollection("Sedes", {
@@ -75,10 +75,10 @@ db.createCollection("Sedes", {
   }
 });
 
-// Índices de sedes
-db.sedes.createIndex({ nombreSede: 1, ciudad: 1 }, { unique: true }); // Evita duplicados en la misma ciudad
-db.sedes.createIndex({ ciudad: 1 });
-db.sedes.createIndex({ nombreSede: 1 });
+// Índices de Sedes
+db.Sedes.createIndex({ nombreSede: 1, ciudad: 1 }, { unique: true }); // Evita duplicados en la misma ciudad
+db.Sedes.createIndex({ ciudad: 1 });
+db.Sedes.createIndex({ nombreSede: 1 });
 
 // Profesores
 db.createCollection("Profesores", {
@@ -146,11 +146,11 @@ db.createCollection("Profesores", {
   }
 });
 
-// Índices de profesores
-db.profesores.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
-db.profesores.createIndex({ nombre: 1 });
-db.profesores.createIndex({ sede_id: 1 });
-db.profesores.createIndex({ especialidades: 1 });
+// Índices de Profesores
+db.Profesores.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
+db.Profesores.createIndex({ nombre: 1 });
+db.Profesores.createIndex({ sede_id: 1 });
+db.Profesores.createIndex({ especialidades: 1 });
 
 // Estudiantes
 db.createCollection("Estudiantes", {
@@ -198,11 +198,11 @@ db.createCollection("Estudiantes", {
   }
 });
 
-// Índices de estudiantes
-db.estudiantes.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
-db.estudiantes.createIndex({ nombre: 1 });
-db.estudiantes.createIndex({ sede_id: 1 });
-db.estudiantes.createIndex({ nivelMusical: 1 });
+// Índices de Estudiantes
+db.Estudiantes.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
+db.Estudiantes.createIndex({ nombre: 1 });
+db.Estudiantes.createIndex({ sede_id: 1 });
+db.Estudiantes.createIndex({ nivelMusical: 1 });
 
 // Empleados
 db.createCollection("Empleados", {
@@ -244,10 +244,10 @@ db.createCollection("Empleados", {
   }
 });
 
-// Índices de empleados
-db.empleados.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
-db.empleados.createIndex({ nombre: 1 });
-db.empleados.createIndex({ sede_id: 1 });
+// Índices de Empleados
+db.Empleados.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
+db.Empleados.createIndex({ nombre: 1 });
+db.Empleados.createIndex({ sede_id: 1 });
 
 // Administradores
 db.createCollection("Administradores", {
@@ -279,9 +279,9 @@ db.createCollection("Administradores", {
   }
 });
 
-// Índices de administradores
-db.administradores.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
-db.administradores.createIndex({ nombre: 1 });
+// Índices de Administradores
+db.Administradores.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: true });
+db.Administradores.createIndex({ nombre: 1 });
 
 // Colección Cursos
 db.createCollection("Cursos", {
@@ -290,7 +290,7 @@ db.createCollection("Cursos", {
       bsonType: "object",
       required: [
         "nombreCurso",
-        "instrumento",
+        "area",
         "nivel",
         "profesor_id",
         "sede_id",
@@ -307,7 +307,7 @@ db.createCollection("Cursos", {
           bsonType: "string",
           description: "Nombre del curso"
         },
-        instrumento: {
+        area: {
           bsonType: "string",
           enum: [
             "piano",
@@ -339,7 +339,7 @@ db.createCollection("Cursos", {
         cupoMaximo: {
           bsonType: "int",
           minimum: 1,
-          description: "Número máximo de estudiantes por curso"
+          description: "Número máximo de Estudiantes por curso"
         },
         cuposDisponibles: {
           bsonType: "int",
@@ -390,10 +390,10 @@ db.createCollection("Cursos", {
 });
 
 // Índices
-db.cursos.createIndex({ sede_id: 1, fechaInicio: 1, fechaFin: 1, nombreCurso: 1 });
-db.cursos.createIndex({ profesor_id: 1 });
-db.cursos.createIndex({ instrumento: 1 });
-db.cursos.createIndex({ nivel: 1 });
+db.Cursos.createIndex({ sede_id: 1, fechaInicio: 1, fechaFin: 1, nombreCurso: 1 });
+db.Cursos.createIndex({ profesor_id: 1 });
+db.Cursos.createIndex({ area: 1 });
+db.Cursos.createIndex({ nivel: 1 });
 
 // Colección Inscripciones
 db.createCollection("Inscripciones", {
@@ -421,9 +421,9 @@ db.createCollection("Inscripciones", {
 });
 
 // Índices
-db.inscripciones.createIndex({ estudiante_id: 1 });
-db.inscripciones.createIndex({ curso_id: 1 });
-db.inscripciones.createIndex({ estudiante_id: 1, curso_id: 1 }, { unique: true });
+db.Inscripciones.createIndex({ estudiante_id: 1 });
+db.Inscripciones.createIndex({ curso_id: 1 });
+db.Inscripciones.createIndex({ estudiante_id: 1, curso_id: 1 }, { unique: true });
 
 // Colección Instrumentos
 db.createCollection("Instrumentos", {
@@ -441,7 +441,6 @@ db.createCollection("Instrumentos", {
             "bajo",
             "batería",
             "violín",
-            "canto",
             "saxofón",
             "trompeta"
           ],
@@ -457,10 +456,10 @@ db.createCollection("Instrumentos", {
 });
 
 // Índices
-db.instrumentos.createIndex({ tipo: 1 });
-db.instrumentos.createIndex({ sede_id: 1 });
+db.Instrumentos.createIndex({ tipo: 1 });
+db.Instrumentos.createIndex({ sede_id: 1 });
 
-// Colección ReservaInstrumento
+// Colección ReservaInstrumentos
 db.createCollection("ReservaInstrumentos", {
   validator: {
     $jsonSchema: {
@@ -495,6 +494,6 @@ db.createCollection("ReservaInstrumentos", {
 });
 
 // Índices
-db.reservaInstrumentos.createIndex({ instrumento_id: 1 });
-db.reservaInstrumentos.createIndex({ estudiante_id: 1 });
-db.reservaInstrumentos.createIndex({ fechaInicio: 1, fechaFin: 1 });
+db.ReservaInstrumentos.createIndex({ instrumento_id: 1 });
+db.ReservaInstrumentos.createIndex({ estudiante_id: 1 });
+db.ReservaInstrumentos.createIndex({ fechaInicio: 1, fechaFin: 1 });
