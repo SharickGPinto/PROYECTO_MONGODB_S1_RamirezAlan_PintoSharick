@@ -4,7 +4,7 @@ use(CampusMusic);
 // Crear colecciones con esquema validator y Índices
 
 // Usuarios
-db.createCollection("usuarios", {
+db.createCollection("Usuarios", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -46,7 +46,7 @@ db.usuarios.createIndex({ rol: 1 });
 db.usuarios.createIndex({ ref_id: 1 });
 
 // Sedes
-db.createCollection("sedes", {
+db.createCollection("Sedes", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -59,7 +59,7 @@ db.createCollection("sedes", {
         },
         ciudad: {  
           bsonType: "string",
-          enum: ["Bogotá","Medellín","Cali","Barranquilla","Cartagena"],
+          enum: ["Bogotá","Medellín","Cali"],
           description: "Ciudad donde se encuentra la sede"
         },
         direccion: {
@@ -81,7 +81,7 @@ db.sedes.createIndex({ ciudad: 1 });
 db.sedes.createIndex({ nombreSede: 1 });
 
 // Profesores
-db.createCollection("profesores", {
+db.createCollection("Profesores", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -153,7 +153,7 @@ db.profesores.createIndex({ sede_id: 1 });
 db.profesores.createIndex({ especialidades: 1 });
 
 // Estudiantes
-db.createCollection("estudiantes", {
+db.createCollection("Estudiantes", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -205,7 +205,7 @@ db.estudiantes.createIndex({ sede_id: 1 });
 db.estudiantes.createIndex({ nivelMusical: 1 });
 
 // Empleados
-db.createCollection("empleados", {
+db.createCollection("Empleados", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -250,7 +250,7 @@ db.empleados.createIndex({ nombre: 1 });
 db.empleados.createIndex({ sede_id: 1 });
 
 // Administradores
-db.createCollection("administradores", {
+db.createCollection("Administradores", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -284,7 +284,7 @@ db.administradores.createIndex({ numDocumento: 1, tipoDocumento: 1 }, { unique: 
 db.administradores.createIndex({ nombre: 1 });
 
 // Colección Cursos
-db.createCollection("cursos", {
+db.createCollection("Cursos", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -396,7 +396,7 @@ db.cursos.createIndex({ instrumento: 1 });
 db.cursos.createIndex({ nivel: 1 });
 
 // Colección Inscripciones
-db.createCollection("inscripciones", {
+db.createCollection("Inscripciones", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -426,7 +426,7 @@ db.inscripciones.createIndex({ curso_id: 1 });
 db.inscripciones.createIndex({ estudiante_id: 1, curso_id: 1 }, { unique: true });
 
 // Colección Instrumentos
-db.createCollection("instrumentos", {
+db.createCollection("Instrumentos", {
   validator: {
     $jsonSchema: {
       bsonType: "object",
@@ -461,7 +461,7 @@ db.instrumentos.createIndex({ tipo: 1 });
 db.instrumentos.createIndex({ sede_id: 1 });
 
 // Colección ReservaInstrumento
-db.createCollection("reservaInstrumentos", {
+db.createCollection("ReservaInstrumentos", {
   validator: {
     $jsonSchema: {
       bsonType: "object",

@@ -100,108 +100,114 @@ Una vez finalizado el modelo conceptual, se empezo a desarrollar el proceso de e
 
 <h4 align=left>6.1 Modelo Lógico</h4>
 
-![](./img/logico.png)
+![](./img/Untitled diagram-2025-10-27-113827.png)
 
 ## CODIGO DE DIAGRAMA LOGICO
 	
-    erDiagram
-	direction TB
-	Usuario {
-		_id ObjectId PK ""  
-		user String  ""  
-		email String  ""  
-		password String  ""  
-		rol ENUM  ""  
-		rol_id ObjectId FK ""  
-	}
-	Administrador {
-		_id ObjectId PK ""  
-		nombre String  ""  
-		numDocumento INT  ""  
-		tipoDocumento ENUM  ""  
-	}
-	Estudiante {
-		_id ObjectID PK ""  
-		numDocumento INT  ""  
-		tipoDocumento ENUM  ""  
-		numCelular INT  ""  
-		nivelMusical ENUM  ""  
-		sede ObjectId FK ""  
-	}
-	Profesor {
-		_id ObjectId PK ""  
-		nombre String  ""  
-		numDocumento INT  ""  
-		tipoDocumento ENUM  ""  
-		numCelular INT  ""  
-		estudios Array  ""  
-		sede ObjectId FK ""  
-	}
-	Especialidad {
-		_id ObjectId PK ""  
-		especialidad ENUM  ""  
-		profesor_id ObjectId FK ""  
-	}
-	Empleado {
-		_id ObjectId  ""  
-		nombre String  ""  
-		numDocumento INT  ""  
-		tipoDocumento ENUM  ""  
-		numCelular INT  ""  
-		sede ObjectId FK ""  
-	}
-	Sede {
-		_id ObjectId PK ""  
-		nombreSede String  ""  
-		ciudad ENUM  ""  
-		direccion String  ""  
-	}
-	Curso {
-		_id ObjectId PK ""  
-		tipo ENUM  ""  
-		sede_id ObjectId FK ""  
-		nombreCurso String  ""  
-		cupos INT  ""  
-		nivelReque ENUM  ""  
-		costo INT  ""  
-		fechaInicio ISODATE  ""  
-		fechaFin ISODATE  ""  
-		horario String  ""  
-	}
-	Inscripcion {
-		_id ObjectId PK ""  
-		curso_id ObjectId FK ""  
-		estudiante_id ObjectId FK ""  
-	}
-	Instrumento {
-		_id ObjetId PK ""  
-		tipo ENUM  ""  
-		sede_id ObjectId FK ""  
-		estado ENUM  ""  
-	}
-	ReservaInstrumento {
-		_id ObjectId PK ""  
-		instrumento_id ObjectId FK ""  
-		user_id ObjectId FK ""  
-		fechaInicio ISODATE  ""  
-		fechaFin ISODATE  ""  
-		costo INT  ""  
-	}
-
-	Usuario||--o|Administrador:"es"
-	Usuario||--o|Estudiante:"es"
-	Usuario||--o|Profesor:"es"
-	Usuario||--o|Empleado:"es"
-	Estudiante||--o|Sede:"pertenece a"
-	Profesor||--o|Sede:"pertenece a"
-	Empleado||--o|Sede:"pertenece a"
-	Curso||--o|Sede:"se ofrece en"
-	Inscripcion||--o|Estudiante:"realiza"
-	Inscripcion||--o|Curso:"pertenece a"
-	Especialidad||--o|Profesor:"es impartida por"
-	ReservaInstrumento||--o|Usuario:"es hecha por"
-	ReservaInstrumento||--o|Instrumento:"es para"
-	Instrumento||--o|Sede:"se encuentra en"
+```mermaid
+---
+config:
+  layout: elk
+title: CampusMusic
+---
+erDiagram
+    Usuario {
+        _id ObjectId PK ""  
+        user String  ""  
+        email String  ""  
+        password String  ""  
+        rol ENUM  ""  
+        ref_id ObjectId FK ""  
+    }
+    Administrador {
+        _id ObjectId PK ""  
+        nombre String  ""  
+        numDocumento INT  ""  
+        tipoDocumento ENUM  ""  
+        telefono String ""
+    }
+    Estudiante {
+        _id ObjectId PK ""  
+        nombre String  ""  
+        numDocumento INT  ""  
+        tipoDocumento ENUM  ""  
+        telefono String  ""  
+        nivelMusical ENUM  ""  
+        sede_id ObjectId FK ""  
+    }
+    Profesor {
+        _id ObjectId PK ""  
+        nombre String  ""  
+        numDocumento INT  ""  
+        tipoDocumento ENUM  ""  
+        telefono String  ""  
+        estudios Array  ""  
+        especialidades Array  ""  
+        sede_id ObjectId FK ""  
+    }
+    Empleado {
+        _id ObjectId PK ""  
+        nombre String  ""  
+        numDocumento INT  ""  
+        tipoDocumento ENUM  ""  
+        telefono String  ""  
+        sede_id ObjectId FK ""  
+    }
+    Sede {
+        _id ObjectId PK ""  
+        nombreSede String  ""  
+        ciudad ENUM  ""  
+        direccion String  ""  
+        telefono String  ""  
+    }
+    Curso {
+        _id ObjectId PK ""  
+        nombreCurso String  ""  
+        instrumento ENUM  ""  
+        nivel ENUM  ""  
+        profesor_id ObjectId FK ""  
+        sede_id ObjectId FK ""  
+        cupoMaximo INT  ""  
+        cuposDisponibles INT  ""  
+        costo INT  ""  
+        fechaInicio ISODATE  ""  
+        fechaFin ISODATE  ""  
+        horario Object  ""  
+    }
+    Inscripcion {
+        _id ObjectId PK ""  
+        estudiante_id ObjectId FK ""  
+        curso_id ObjectId FK ""  
+        fecha ISODATE  ""  
+    }
+    Instrumento {
+        _id ObjectId PK ""  
+        tipo ENUM  ""  
+        sede_id ObjectId FK ""  
+    }
+    ReservaInstrumento {
+        _id ObjectId PK ""  
+        instrumento_id ObjectId FK ""  
+        estudiante_id ObjectId FK ""  
+        fechaInicio ISODATE  ""  
+        fechaFin ISODATE  ""  
+        costo INT  ""  
+    }
+    Usuario ||--o|Administrador: "es"
+    Usuario ||--o|Estudiante: "es"
+    Usuario ||--o|Profesor: "es"
+    Usuario ||--o|Empleado: "es"
+    Estudiante ||--o|Sede: "pertenece a"
+    Profesor ||--o|Sede: "pertenece a"
+    Empleado ||--o|Sede: "pertenece a"
+    Curso ||--o|Sede: "se ofrece en"
+    Curso ||--o|Profesor: "impartido por"
+    Inscripcion ||--o|Estudiante: "realiza"
+    Inscripcion ||--o|Curso: "pertenece a"
+    ReservaInstrumento ||--o|Estudiante: "es hecha por"
+    ReservaInstrumento ||--o|Instrumento: "es para"
+    Instrumento ||--o|Sede: "se encuentra en"
+```
 
 <h4 align=left>5.2 Descripcion Tecnica</h4>
 
