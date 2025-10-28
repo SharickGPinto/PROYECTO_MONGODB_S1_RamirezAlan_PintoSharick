@@ -10,24 +10,27 @@ const Cursos = session.getDatabase("CampusMusic");
 
 session.startTransaction();
 //Con la transacción activa, se procede a ejecutar las operaciones deseadas.
-
+const cursoId = ObjectId("690026a40a153e5ca959cf87");
 db.Estudiantes.insertOne({
-    nombre: "Brenda Núñez",
+    nombre: "Juan Núñez",
     numDocumento: 30030016,
     tipoDocumento: "CC",
-    telefono: "3102223344",
+    telefono: "31024563344",
     nivelMusical: "intermedio",
     sede_id: ObjectId("690026a30a153e5ca959cf65")
 });
 
+const eId = ObjectId("6900c2afe85e12074a464537");
+
 db.Inscripciones.insertOne({
-    estudiante_id: ('6900be33e85e12074a464535'),
-    curso_id: ObjectId("690026a40a153e5ca959cf87"),
-    fecha: new Date("2025-11-15")
+    estudiante_id: eId,
+    curso_id: cursoId,
+    fecha: ISODate("2025-11-15T00:00:00Z")
 });
-db.Cursos.updateOne({
-    
-})
+db.Cursos.updateOne(
+    { _id: cursoId, cuposDisponibles: { $gt: 0 } },
+    { $inc: { cuposDisponibles: -1 } }
+  );
 
 /*Estas operaciones, al estar dentro de una transacción, 
 aún no se reflejan en la base de datos hasta que se confirme la operación. 
