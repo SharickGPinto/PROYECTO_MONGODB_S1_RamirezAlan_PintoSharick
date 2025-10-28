@@ -1,94 +1,77 @@
-//ENTRAR A ADMIN EN MONGODB PARA DEFINIR LOS ROLES
+use admin;
 
-use(admin);
-// ADMINISTRADOR: ACCESO TOTAL
+// Administrador
 db.createRole({
     role: "administrador",
     privileges: [
-        {
-            resource: {
-                db: "campusMusic", collection: ""
-            },
-            actions: [
-                "find", "insert", "update", "remove", "createCollection", "dropCollection", "createIndex", "dropIndex"
-            ]
-        }
+      {
+        resource: { db: "CampusMusic", collection: "" }, // todas las colecciones
+        actions: ["find", "insert", "update", "remove"]
+      }
     ],
-    roles: []
-});
-// ESTUDIANTE MIRAR INFORMACION: INSCRIBIRSE, RESERVAR
-db.createRole({
-    role: "estudiantes",
+    roles: [
+      { role: "readWrite", db: "CampusMusic" },
+      { role: "userAdminAnyDatabase", db: "admin" } // puede crear usuarios y roles
+    ]
+  });
+  
+  
+  // Empleado
+  db.createRole({
+    role: "empleadoSede",
     privileges: [
-        {
-            resource: {
-                db: "campusMusic", collection: "sedes"
-            },
-            actions: ["find"]
-        },
-        {
-            resource: {
-                db: "campusMusic", collection: "cursos"
-            },
-            actions: ["find"]
-        },
-        {
-            resource: {
-                db: "campusMusic", collection: "profesores"
-            },
-            actions: ["find"]
-        },
-        {
-            resource: {
-                db: "campusMusic", collection: "instrumento"
-            },
-            actions: ["find"]
-        },
-        {
-            resource: {
-                db: "campusMusic", collection: "usuarios"
-            },
-            actions: ["find"]
-        },
-        {
-            resource: {
-                db: "campusMusic", collection: "reservaInstrumento"
-            },
-            actions: ["find", "insert", "update"]
-        },
-        {
-            resource: {
-                db: "campusMusic", collection: "inscripciones"
-            },
-            actions: ["find", "insert"]
-        }
-
+      // Puede leer estudiantes, profesores y cursos
+      {
+        resource: { db: "CampusMusic", collection: "Estudiantes" },
+        actions: ["find"]
+      },
+      {
+        resource: { db: "CampusMusic", collection: "Profesores" },
+        actions: ["find"]
+      },
+      {
+        resource: { db: "CampusMusic", collection: "Cursos" },
+        actions: ["find"]
+      },
+      // Puede registrar inscripciones
+      {
+        resource: { db: "CampusMusic", collection: "Inscripciones" },
+        actions: ["insert", "find"]
+      },
+      // Puede registrar reservas
+      {
+        resource: { db: "CampusMusic", collection: "ReservaInstrumentos" },
+        actions: ["insert", "find"]
+      }
     ],
     roles: []
-});
-
-db.createRole({
-    role: "profesores",
+  });
+  
+  
+  // Estudiante
+  db.createRole({
+    role: "estudiante",
     privileges: [
-        {
-            resource: {
-                db: "campusMusic", collection: "cursos"
-            },
-            actions: ["find", "update"]
-        },
-        {
-            resource: {
-                db: "campusMusic", collection: "inscripciones"
-            },
-            actions: ["find"]
-        },
-
-        {
-            resource: {
-                db: "campusMusic", collection: "estudiantes"
-            },
-            actions: ["find"]
-        }
+      // Leer su propia información
+      {
+        resource: { db: "CampusMusic", collection: "Estudiantes" },
+        actions: ["find"]
+      },
+      // Consultar cursos disponibles
+      {
+        resource: { db: "CampusMusic", collection: "Cursos" },
+        actions: ["find"]
+      },
+      // Consultar su historial de inscripciones
+      {
+        resource: { db: "CampusMusic", collection: "Inscripciones" },
+        actions: ["find"]
+      },
+      // Reservar instrumentos
+      {
+        resource: { db: "CampusMusic", collection: "ReservaInstrumentos" },
+        actions: ["insert", "find"]
+      }
     ],
     roles: []
-});
+  });
