@@ -3,6 +3,14 @@
 
  <h6 align=center>Proyecto MongoDB: (Alan Thomas Ramírez Vargas & Sharick Giovanna Pinto Rodriguez)</h6>
 
+ <div align="center">
+
+<img src="https://img.shields.io/badge/MongoDB-6.0+-47A248?logo=mongodb&logoColor=white"/>
+<img src="https://img.shields.io/badge/MongoDB%20Compass-1.40+-green?logo=mongodb"/>
+<img src="https://img.shields.io/badge/Editor-VSCode-007ACC?logo=visualstudiocode&logoColor=white"/>
+
+</div>
+
 ---
 
 # Tabla de Contenido
@@ -573,5 +581,31 @@ const s1 = sedesRes.insertedIds[1]; // Medellín
 const s2 = sedesRes.insertedIds[2]; // Cali
 
 ```
+<h4 align=center>Ejemplos de Consultas</h4>
+
+#### Ejemplo (Consultas):
+**1.​ ¿Cuántos estudiantes se inscribieron por sede en el último mes?**
+```
+db.Inscripciones.aggregate([
+    {
+        $addFields: {
+            mes: { $month: "$fecha" },
+        }
+    },
+    {
+        $match: {
+            mes: { $eq: 11 }
+        }
+    },
+    {
+        $group: {
+            _id: 0,
+            estudiantesInscriptos: { $sum: 1 }
+        }
+    }
+]);
+```
+
+
 
 
