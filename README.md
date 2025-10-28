@@ -22,6 +22,10 @@
 
 <h6 align=center> 8. Estructura de la Base de Datos </h6>
 
+<h6 align=center> 9. Modelo Fisico </h6>
+
+<h6 align=center> 10. Inserciones de Datos </h6>
+
 
 ---
 
@@ -384,7 +388,7 @@ instrumentos: inventario por sede (tipo, sede_id). Un instrumento se encuentra e
 
 reservaInstrumentos: colección puente entre estudiantes e instrumentos (N:M). Contiene instrumento_id, estudiante_id, fechaInicio, fechaFin y costo. Permite gestionar préstamos/uso temporal de instrumentos.
 
-<h4 align=center>Construcción del Modelo Físico</h4>
+<h3 align=left>9. Construcción del Modelo Físico</h3>
 
 Tras completar la normalización, el modelo lógico reestructurado (3FN) se llevó al modelo físico mediante comandos de MongoDB Shell (mongosh). En esta etapa se definieron explícitamente las colecciones, sus esquemas de validación ($jsonSchema) y los índices (incluidos los únicos) que garantizan la integridad y unicidad de los datos.
 
@@ -499,5 +503,5 @@ Que genera índices únicos en campos determinados, evitando que surjan datos re
 
 ---
 
-<h3 align=left>9. Inserciones de Datos</h3>
+<h3 align=left>10. Inserciones de Datos</h3>
 
