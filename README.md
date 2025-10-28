@@ -505,3 +505,73 @@ Que genera índices únicos en campos determinados, evitando que surjan datos re
 
 <h3 align=left>10. Inserciones de Datos</h3>
 
+Una vez creado el esqueleto de la base de datos, se inició la inserción de documentos en cada colección. Este proceso consiste en agregar información coherente con las validaciones definidas mediante $jsonSchema y con la unicidad garantizada por los índices (simples y compuestos) configurados en el modelo físico.
+
+<h4 align=center>Descripción</h4>
+
+En esta sección del proyecto **CampusMusic**, las inserciones se diseñaron para ser pertinentes respecto a la estructura validada previamente. Se utilizaron ObjectId generados por MongoDB y valores realistas (sedes en Bogotá, Medellín y Cali; nombres, teléfonos, áreas e instrumentos propios del contexto).
+El dataset cubre los volúmenes requeridos:
+
+```
+
+3 sedes
+
+10 profesores con especialidades variadas
+
+15 estudiantes en niveles principiante, intermedio y avanzado
+
+15 cursos (5 por sede), con cupos, costos, fechas y horarios
+
+20 instrumentos disponibles por sede
+
+30 inscripciones (pares estudiante–curso únicos)
+
+10 reservas de instrumentos
+
+```
+
+Usuarios vinculados por ref_id a su documento en la colección correspondiente (administrador, empleado, profesor o estudiante)
+
+Esto facilita consultas y agregaciones para analítica: ocupación por sede, cursos más demandados, profesores con más estudiantes, instrumentos más reservados e histórico de cursos por estudiante.
+
+<h4 align=center>Código</h4>
+
+**[NOTA]**: El código de inserción se encuentra en el archivo **test_dataset.js** de este repositorio bloques insertMany organizados por colección.
+
+<h4 align=center>Descripción Técnica</h4>
+
+Para cargar los datos en la base **CampusMusic**:
+
+Abrir la Mongo Shell local o conectarse por URI:
+```
+mongosh
+```
+
+o
+```
+mongosh '<uri>'
+```
+
+Seleccionar la base:
+```
+use CampusMusic
+```
+
+Asegurarse de haber creado previamente las colecciones, validadores e índices (por ejemplo, ejecutando **db_config.js**).
+
+Ejecutar los bloques de **test_dataset.js**
+
+#### Ejemplo (colección #1: `SedesRes`):
+```
+const sedesRes = db.Sedes.insertMany([
+  { nombreSede: "Campus Bogotá Norte",  ciudad: "Bogotá",   direccion: "Cra 15 # 123-45", telefono: "3001110000" },
+  { nombreSede: "Campus Medellín Sur",  ciudad: "Medellín", direccion: "Cl 10 # 20-30",  telefono: "3002220000" },
+  { nombreSede: "Campus Cali Pacífico", ciudad: "Cali",     direccion: "Av 4N # 40-22",  telefono: "3003330000" }
+]);
+const s0 = sedesRes.insertedIds[0]; // Bogotá
+const s1 = sedesRes.insertedIds[1]; // Medellín
+const s2 = sedesRes.insertedIds[2]; // Cali
+
+```
+
+
