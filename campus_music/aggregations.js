@@ -12,6 +12,7 @@ costo).
 */
 
 //1.​ ¿Cuántos estudiantes se inscribieron por sede en el último mes?
+use CampusMusic;
 
 db.Inscripciones.aggregate([
     // inscripciones desde el ultimo mes
