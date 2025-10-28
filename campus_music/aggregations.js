@@ -238,7 +238,7 @@ db.ReservaInstrumentos.aggregate([
 db.Inscripciones.aggregate([
     {
         $match: {
-            estudiante_id: ObjectId("6900a8facb15e0ce96fe691e") // <-- reemplazar
+            estudiante_id: ObjectId("ID DEL ESTUDIANTE") // <-- reemplazar
         }
     },
     {
