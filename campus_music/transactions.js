@@ -35,7 +35,7 @@ try {
 
     // Actualizar curso: reducir cupos disponibles si aún hay espacio
     const updateRes = sessionDb.Cursos.updateOne(
-        { _id: cursoId },
+        { _id: cursoId, cuposDisponibles: { $gt: 0 } },
         { $inc: { cuposDisponibles: -1 } }
     );
 
