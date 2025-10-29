@@ -34,6 +34,10 @@
 
 <h6 align=center> 10. Inserciones de Datos </h6>
 
+<h6 align=center> 11. Consultas </h6>
+
+
+
 
 ---
 
@@ -581,31 +585,416 @@ const s1 = sedesRes.insertedIds[1]; // Medellín
 const s2 = sedesRes.insertedIds[2]; // Cali
 
 ```
-<h4 align=center>Ejemplos de Consultas</h4>
+
+//poner
+
+<h3 align=left>11. Consultas</h3>
+
+En este apartado se podrán encontrar algunas de las consultas que se podrán realizar una vez importada toda la base de datos desde los archivos db_config.js (DDL) y test_dataset.js (DML), y que se podrán encontrar en el archivo aggregations.js.
 
 #### Ejemplo (Consultas):
+
 **1.​ ¿Cuántos estudiantes se inscribieron por sede en el último mes?**
 ```
 db.Inscripciones.aggregate([
-    {
-        $addFields: {
-            mes: { $month: "$fecha" },
-        }
-    },
+    // inscripciones desde el ultimo mes
     {
         $match: {
-            mes: { $eq: 11 }
+            fecha: { $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)) }  // new Date("2025-11-30")
         }
     },
+    // traer el curso para conocer la sede
+    {
+        $lookup: {
+            from: "Cursos",
+            localField: "curso_id",
+            foreignField: "_id",
+            as: "curso"
+        }
+    },
+    { $unwind: "$curso" },
+    // agrupar por sede del curso
     {
         $group: {
+            _id: "$curso.sede_id",
+            totalInscritosUltimoMes: { $sum: 1 }
+        }
+    },
+    // traer datos de la sede
+    {
+        $lookup: {
+            from: "Sedes",
+            localField: "_id",
+            foreignField: "_id",
+            as: "sede"
+        }
+    },
+    { $unwind: "$sede" },
+    {
+        $project: {
             _id: 0,
-            estudiantesInscriptos: { $sum: 1 }
+            sedeId: "$_id",
+            nombreSede: "$sede.nombreSede",
+            ciudad: "$sede.ciudad",
+            totalInscritosUltimoMes: 1
+        }
+    },
+    { $sort: { totalInscritosUltimoMes: -1 } }
+]);
+```
+
+Resultado
+
+```
+{
+  totalInscritosUltimoMes: 10,
+  sedeId: ObjectId('690140eecb4023905e30d5cb'),
+  nombreSede: 'Campus Medellín Sur',
+  ciudad: 'Medellín'
+}
+{
+  totalInscritosUltimoMes: 10,
+  sedeId: ObjectId('690140eecb4023905e30d5ca'),
+  nombreSede: 'Campus Bogotá Norte',
+  ciudad: 'Bogotá'
+}
+{
+  totalInscritosUltimoMes: 10,
+  sedeId: ObjectId('690140eecb4023905e30d5cc'),
+  nombreSede: 'Campus Cali Pacífico',
+  ciudad: 'Cali'
+}
+```
+**Cómo funciona**
+
+$match: filtra inscripciones de los últimos 30 días.
+
+$lookup/$unwind (Cursos): obtiene la sede asociada a cada inscripción.
+
+$group: suma inscripciones por sede_id.
+
+$lookup/$unwind (Sedes): añade nombreSede y ciudad.
+
+$project/$sort: devuelve un resultado limpio, ordenado por mayor volumen
+
+
+
+**2.​ ¿Cuáles son los cursos más demandados en cada sede?**
+
+```
+db.Inscripciones.aggregate([
+    // unir curso
+    {
+        $lookup: {
+            from: "Cursos",
+            localField: "curso_id",
+            foreignField: "_id",
+            as: "curso"
+        }
+    },
+    { $unwind: "$curso" },
+    // contar por curso y sede
+    {
+        $group: {
+            _id: { sede_id: "$curso.sede_id", curso_id: "$curso._id", nombreCurso: "$curso.nombreCurso" },
+            inscritos: { $sum: 1 }
+        }
+    },
+    // ordenar para luego sacar el primero por sede
+    { $sort: { "_id.sede_id": 1, inscritos: -1 } },
+    // agrupar por sede y quedarnos con el más demandado
+    {
+        $group: {
+            _id: "$_id.sede_id",
+            cursoMasDemandado: { $first: "$_id.nombreCurso" },
+            cursoId: { $first: "$_id.curso_id" },
+            inscritos: { $first: "$inscritos" }
+        }
+    },
+    // traer info de sede
+    {
+        $lookup: {
+            from: "Sedes",
+            localField: "_id",
+            foreignField: "_id",
+            as: "sede"
+        }
+    },
+    { $unwind: "$sede" },
+    {
+        $project: {
+            _id: 0,
+            sedeId: "$_id",
+            nombreSede: "$sede.nombreSede",
+            ciudad: "$sede.ciudad",
+            cursoMasDemandado: 1,
+            cursoId: 1,
+            inscritos: 1
+        }
+    },
+    { $sort: { inscritos: -1 } }
+]);
+```
+Resultado
+
+```
+{
+  cursoMasDemandado: 'Violín Avanzado',
+  cursoId: ObjectId('690140efcb4023905e30d5f1'),
+  inscritos: 2,
+  sedeId: ObjectId('690140eecb4023905e30d5cb'),
+  nombreSede: 'Campus Medellín Sur',
+  ciudad: 'Medellín'
+}
+{
+  cursoMasDemandado: 'Piano Básico',
+  cursoId: ObjectId('690140efcb4023905e30d5ec'),
+  inscritos: 2,
+  sedeId: ObjectId('690140eecb4023905e30d5ca'),
+  nombreSede: 'Campus Bogotá Norte',
+  ciudad: 'Bogotá'
+}
+{
+  cursoMasDemandado: 'Producción Musical I',
+  cursoId: ObjectId('690140efcb4023905e30d5f6'),
+  inscritos: 2,
+  sedeId: ObjectId('690140eecb4023905e30d5cc'),
+  nombreSede: 'Campus Cali Pacífico',
+  ciudad: 'Cali'
+}
+```
+**Cómo funciona**
+
+$lookup (Cursos) y $unwind: une cada inscripción con su curso y “aplana” el arreglo.
+
+$group (curso+sede): cuenta inscripciones por combinación {sede_id, curso_id, nombreCurso}.
+
+$sort: ordena por sede y, dentro de cada sede, por mayor número de inscritos.
+
+$group (por sede): toma el primer curso (el más inscrito por la ordenación previa).
+
+$lookup (Sedes) y $project: añade nombreSede/ciudad y devuelve un documento limpio por sede.
+
+
+**5.​ ¿Qué instrumento es el más reservado?**
+```
+db.ReservaInstrumentos.aggregate([
+    // traer instrumento
+    {
+        $lookup: {
+            from: "Instrumentos",
+            localField: "instrumento_id",
+            foreignField: "_id",
+            as: "instrumento"
+        }
+    },
+    { $unwind: "$instrumento" },
+
+    // agrupar por tipo de instrumento
+    {
+        $group: {
+            _id: "$instrumento.tipo",
+            totalReservas: { $sum: 1 }
+        }
+    },
+    { $sort: { totalReservas: -1 } },
+    { $limit: 5 },
+    {
+        $project: {
+            _id: 0,
+            tipoInstrumento: "$_id",
+            totalReservas: 1
         }
     }
 ]);
 ```
+Resultado
 
+```
+{
+  totalReservas: 2,
+  tipoInstrumento: 'guitarra'
+}
+{
+  totalReservas: 2,
+  tipoInstrumento: 'piano'
+}
+{
+  totalReservas: 2,
+  tipoInstrumento: 'bajo'
+}
+{
+  totalReservas: 1,
+  tipoInstrumento: 'batería'
+}
+{
+  totalReservas: 1,
+  tipoInstrumento: 'violín'
+}
+```
 
+**Cómo funciona**
 
+$lookup/$unwind: adjunta cada documento de Instrumentos para conocer el tipo.
 
+$group: suma el número de reservas por tipo.
+
+$sort/$limit: ordena de mayor a menor y devuelve el top-N.
+
+$project: limpia el resultado con tipoInstrumento y totalReservas.
+
+<h3 align=left>Roles de Usuario y Permisos</h3>
+
+---
+
+**[NOTA]** :Si trabajas en MongoDB Atlas, la creación de database users suele hacerse desde la UI. Los roles personalizados puedes configurarlos allí o vía mongosh si tu plan lo permite.
+
+**[NOTA]** : Antes de crear los usuarios de este sistema, habilita la autenticación y crea un usuario admin con privilegios completos.
+
+---
+
+**Crear usuario admi (súper-usuario local)**
+
+*Ejecuta en use admin desde MongoShell:*
+
+```
+db.createUser({
+  user: "admin",
+  pwd:  passwordPrompt("password"),
+  roles: [{ role: "root", db: "admin" }]
+});
+```
+---
+**[NOTA]** : En Atlas, el equivalente de root es atlasAdmin (configúralo desde la UI).
+
+---
+
+<h4> Habilitar autenticación en el servidor (solo despliegue local)</h4> 
+
+```
+sudo nano /etc/mongod.conf
+```
+
+Agrega justo bajo #security::
+
+```
+security:
+  authorization: enabled
+```
+
+Guarda y reinicia:
+
+```
+sudo systemctl restart mongod
+```
+
+Vuelve a ingresar con autenticación:
+
+```
+mongosh -u "admin" --authenticationDatabase "admin"
+```
+---
+**Definir roles personalizados de CampusMusic**
+
+*Ejecuta lo siguiente en use CampusMusic*
+
+```
+// ADMINISTRADOR: control total sobre CampusMusic
+
+db.createRole({
+  role: "administrador",
+  privileges: [], // se apoya en roles integrados
+  roles: [
+    { role: "readWrite", db: "CampusMusic" },
+    { role: "dbAdmin",   db: "CampusMusic" },
+    { role: "userAdmin", db: "CampusMusic" }
+  ]
+});
+```
+```
+// EMPLEADO DE SEDE:
+// - Lee Estudiantes/Profesores/Cursos/Instrumentos
+// - Inserta Inscripciones/Reservas
+// - Puede actualizar Cursos (p.ej., cuposDisponibles)
+
+db.createRole({
+  role: "empleadoSede",
+  privileges: [
+    { resource: { db: "CampusMusic", collection: "Estudiantes" },          actions: ["find"] },
+    { resource: { db: "CampusMusic", collection: "Profesores"  },          actions: ["find"] },
+    { resource: { db: "CampusMusic", collection: "Instrumentos"},          actions: ["find"] },
+    { resource: { db: "CampusMusic", collection: "Cursos"      },          actions: ["find","update"] },
+    { resource: { db: "CampusMusic", collection: "Inscripciones"},         actions: ["insert","find"] },
+    { resource: { db: "CampusMusic", collection: "ReservaInstrumentos"},   actions: ["insert","find"] }
+  ],
+  roles: []
+});
+```
+
+```
+// ESTUDIANTE:
+// - Lee su información (la app debe filtrar por su _id)
+// - Consulta cursos e historial de inscripciones
+// - Puede reservar instrumentos
+
+db.createRole({
+  role: "estudiante",
+  privileges: [
+    { resource: { db: "CampusMusic", collection: "Estudiantes" },          actions: ["find"] },
+    { resource: { db: "CampusMusic", collection: "Cursos"      },          actions: ["find"] },
+    { resource: { db: "CampusMusic", collection: "Inscripciones"},         actions: ["find"] },
+    { resource: { db: "CampusMusic", collection: "Instrumentos"},          actions: ["find"] },
+    { resource: { db: "CampusMusic", collection: "ReservaInstrumentos"},   actions: ["insert","find"] }
+  ],
+  roles: []
+});
+```
+
+---
+
+<h3>Crear usuarios de base de datos (uno por uno) </h3>
+
+*Ejecuta lo siguiente en*  **use CampusMusic**
+
+**Administradores**
+
+```
+db.createUser({ user:"admin.carolina", pwd:"Adm!n2025#cd", roles:[{ role:"administrador", db:"CampusMusic" }] });
+db.createUser({ user:"admin.esteban",  pwd:"Adm!n2025#ea", roles:[{ role:"administrador", db:"CampusMusic" }] });
+db.createUser({ user:"admin.nora",     pwd:"Adm!n2025#nv", roles:[{ role:"administrador", db:"CampusMusic" }] });
+```
+
+**Empleados**
+
+```
+db.createUser({ user:"empleado.julio",    pwd:"Empl2025#jc", roles:[{ role:"empleadoSede", db:"CampusMusic" }] });
+db.createUser({ user:"empleado.ximena",   pwd:"Empl2025#xp", roles:[{ role:"empleadoSede", db:"CampusMusic" }] });
+db.createUser({ user:"empleado.fernando", pwd:"Empl2025#fh", roles:[{ role:"empleadoSede", db:"CampusMusic" }] });
+```
+
+**Profesores**
+
+```
+db.createUser({ user:"prof.ana.torres",     pwd:"Prof2025#01", roles:[{ role:"read", db:"CampusMusic" }] });
+db.createUser({ user:"prof.luis.perez",     pwd:"Prof2025#02", roles:[{ role:"read", db:"CampusMusic" }] });
+db.createUser({ user:"prof.carlos.rios",    pwd:"Prof2025#03", roles:[{ role:"read", db:"CampusMusic" }] });
+db.createUser({ user:"prof.paula.diaz",     pwd:"Prof2025#04", roles:[{ role:"read", db:"CampusMusic" }] });
+
+```
+
+**Estudiantes**
+
+```
+db.createUser({ user:"est.mateo.lopez",      pwd:"Est2025#01", roles:[{ role:"estudiante", db:"CampusMusic" }] });
+db.createUser({ user:"est.valentina.ruiz",   pwd:"Est2025#02", roles:[{ role:"estudiante", db:"CampusMusic" }] });
+db.createUser({ user:"est.santiago.herrera", pwd:"Est2025#03", roles:[{ role:"estudiante", db:"CampusMusic" }] });
+db.createUser({ user:"est.isabella.ortiz",   pwd:"Est2025#04", roles:[{ role:"estudiante", db:"CampusMusic" }] });
+db.createUser({ user:"est.samuel.ramirez",   pwd:"Est2025#05", roles:[{ role:"estudiante", db:"CampusMusic" }] });
+```
+
+**Verificacion**
+```
+// En CampusMusic
+db.getRoles({ showPrivileges: true });
+db.getUsers();
+```

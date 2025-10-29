@@ -276,17 +276,3 @@ db.Usuarios.insertMany([
   ...usuariosProfes,
   ...usuariosEst
 ]);
-
-// =======================
-// Resumen
-// =======================
-print("✔ Sedes:", db.Sedes.countDocuments());
-print("✔ Profesores:", db.Profesores.countDocuments());
-print("✔ Estudiantes:", db.Estudiantes.countDocuments());
-print("✔ Empleados:", db.Empleados.countDocuments());
-print("✔ Administradores:", db.Administradores.countDocuments());
-print("✔ Cursos:", db.Cursos.countDocuments());
-print("✔ Instrumentos:", db.Instrumentos.countDocuments());
-print("✔ Inscripciones:", db.Inscripciones.countDocuments());
-print("✔ Reservas:", db.ReservaInstrumentos.countDocuments());
-print("✔ Usuarios:", db.Usuarios.countDocuments());
