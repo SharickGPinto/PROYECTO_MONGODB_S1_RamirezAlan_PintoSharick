@@ -36,6 +36,8 @@
 
 <h6 align=center> 11. Consultas </h6>
 
+<h6 align=center> 12. Roles </h6>
+
 
 
 
@@ -843,7 +845,7 @@ $sort/$limit: ordena de mayor a menor y devuelve el top-N.
 
 $project: limpia el resultado con tipoInstrumento y totalReservas.
 
-<h3 align=left>Roles de Usuario y Permisos</h3>
+<h3 align=left> 12. Roles de Usuario y Permisos</h3>
 
 ---
 
