@@ -387,3 +387,42 @@ db.Cursos.aggregate([
     }
   ]);
   
+
+//pipelineEstudiantesDestacados
+
+
+db.Inscripciones.aggregate([
+    {
+        $lookup: {
+            from: "Cursos",
+            localField: "curso_id",
+            foreignField: "_id",
+            as: "cursos"
+        }
+    },
+    { $unwind: "$cursos" },
+    {
+        $group: {
+            _id: "$cursos.estudiante_id",
+            totalEstudiantesInscritos: { $sum: 1 }
+        }
+    },
+    {
+        $lookup: {
+            from: "Estudiantes",
+            localField: "_id",
+            foreignField: "_id",
+            as: "estudiantes"
+        }
+    },
+    { $unwind: "$estudiantes" },
+    {
+        $project: {
+            _id: 0,
+            nombreEstudiante: "$estudiantes.nombre",
+            cantidadCursos: "$Inscripciones.curso_id",
+            EstudiantesDestacados: 1
+        }
+    },
+    { $sort: { EstudiantesDestacados: -1 } }
+]);
