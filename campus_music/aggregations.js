@@ -426,3 +426,37 @@ db.Inscripciones.aggregate([
     },
     { $sort: { EstudiantesDestacados: -1 } }
 ]);
+
+
+// EXAMEN Alan Ramirez pipelineIngresosMensualesPorCurso
+
+db.Inscripciones.aggregate([
+    {
+        $group: {
+            _id: "$curso_id",
+            mesAnio: new Date((new Date().setMonth(new Date("$fecha").getMonth())).setFullYear(new Date("$fecha").getFullYear())),
+            cantidadInscripciones: { $sum: 1 }
+        }
+    },
+    {
+        $lookup: {
+            from: "Cursos",
+            localField: "_id",
+            foreignField: "_id",
+            as: "curso"
+        }
+    },
+    { $unwind: "$curso" },
+    {
+        $project: {
+            _id: 0,
+            nombreCurso: "$curso.nombreCurso",
+            IdCurso: "$_id",
+            IdSede: "$curso.sede_id",
+            mesAnio: 1,
+            cantidadInscripciones: 1,
+            totalIngresos: { $multiply : [ "$cantidad", "$curso.costo" ] }
+        }
+    },
+    { $sort: { mesAnio: -1 } }
+]);
