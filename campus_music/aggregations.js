@@ -372,21 +372,21 @@ db.Inscripciones.aggregate([
 
 db.Cursos.aggregate([
     {
-      $match: {
-        cuposDisponibles: { $lt: 0 } // cursos que tienen menos de 0 cupos
-      }
+        $match: {
+            cuposDisponibles: { $lt: 0 } // cursos que tienen menos de 0 cupos
+        }
     },
     {
-      $project: {
-        _id: 0,
-        cursoId: "$_id",
-        nombreCurso: 1,
-        cupoMaximo: 1,
-        cuposDisponibles: 1
-      }
+        $project: {
+            _id: 0,
+            cursoId: "$_id",
+            nombreCurso: 1,
+            cupoMaximo: 1,
+            cuposDisponibles: 1
+        }
     }
-  ]);
-  
+]);
+
 
 //pipelineEstudiantesDestacados
 
@@ -432,16 +432,36 @@ db.Inscripciones.aggregate([
 
 db.Inscripciones.aggregate([
     {
+        $addFields: {
+            mes: { $month: "$fecha" },
+            anio: { $year: "$fecha" },
+        }
+    },
+    {
         $group: {
-            _id: "$curso_id",
-            mesAnio: new Date((new Date().setMonth(new Date("$fecha").getMonth())).setFullYear(new Date("$fecha").getFullYear())),
+            _id: {
+                curso_id: "$curso_id",
+                mes: "$mes",
+                anio: "$anio"
+            },
             cantidadInscripciones: { $sum: 1 }
+        }
+    },
+    {
+        $addFields: {
+            mesAnio: {
+                $dateFromParts: {
+                    year: "$_id.anio",
+                    month: "$_id.mes",
+                    day: 1
+                }
+            }
         }
     },
     {
         $lookup: {
             from: "Cursos",
-            localField: "_id",
+            localField: "_id.curso_id",
             foreignField: "_id",
             as: "curso"
         }
@@ -451,12 +471,12 @@ db.Inscripciones.aggregate([
         $project: {
             _id: 0,
             nombreCurso: "$curso.nombreCurso",
-            IdCurso: "$_id",
+            IdCurso: "$_id.curso_id",
             IdSede: "$curso.sede_id",
             mesAnio: 1,
             cantidadInscripciones: 1,
-            totalIngresos: { $multiply : [ "$cantidad", "$curso.costo" ] }
+            totalIngresos: { $multiply: ["$cantidadInscripciones", "$curso.costo"] }
         }
     },
-    { $sort: { mesAnio: -1 } }
+    { $sort: { "mes": -1, "anio": -1 } }
 ]);
