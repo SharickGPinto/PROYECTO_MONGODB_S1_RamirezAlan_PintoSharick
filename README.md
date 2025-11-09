@@ -38,6 +38,8 @@
 
 <h6 align=center> 12. Roles </h6>
 
+<h6 align=center> 13. Conclusión </h6>
+
 
 
 
@@ -67,9 +69,7 @@ Algunas de las entidades derivadas de los requerimientos ya contaban con una est
 
 En particular, sedes, estudiantes, profesores, cursos, inscripciones, instrumentos, reservas de instrumentos y usuarios/roles disponían de atributos fijos establecidos por el cliente. No obstante, dichos atributos podrían normalizarse posteriormente, separándolos en colecciones diferenciadas cuando resulte conveniente para la integridad y el rendimiento.
 
-Se especifican también relaciones entre directores generales y hospitales, así como relaciones entre pacientes y visitas médicas (un mismo paciente puede solicitar múltiples visitas, pero cada visita está asociada a un único paciente). Las demás relaciones se tendrán que deducir por lógica y siguiendo la estructura y contexto en el que se desarrolla la base de datos.
-
-Dado que el sistema está enfocado en varios Municipios, los datos ingresados, la cantidad de estos y los formatos que se definirán a través de `$jsonSchema` serán coherentes con dicho contexto, estableciendo una conexión con la realidad que representa la BBDD.
+Dado que el sistema está enfocado en varias Sedes, los datos ingresados, la cantidad de estos y los formatos que se definirán a través de `$jsonSchema` serán coherentes con dicho contexto, estableciendo una conexión con la realidad que representa la BBDD.
 
 Problema: datos dispersos y sin control de cupos; reportes manuales poco confiables.
 
@@ -1000,3 +1000,13 @@ db.createUser({ user:"est.samuel.ramirez",   pwd:"Est2025#05", roles:[{ role:"es
 db.getRoles({ showPrivileges: true });
 db.getUsers();
 ```
+___
+
+<h3 align=left>11. Conclusión</h3>
+
+
+A lo largo de este proyecto se desarrolló un sistema completo de base de datos para la institución Campus Music, cumpliendo con los requerimientos funcionales y estructurales definidos desde la fase inicial. Se abordaron todas las etapas del proceso de modelado, desde el diseño conceptual hasta el modelo físico, aplicando principios de normalización y buenas prácticas en la gestión de datos con MongoDB.
+
+La implementación propuesta permite centralizar la información académica y operativa, asegurando integridad, consistencia y seguridad mediante roles diferenciados y validaciones personalizadas. Así mismo, se habilitaron consultas analíticas y transacciones orientadas a la gestión de inscripciones, reservas e informes por sede, profesor, curso o estudiante.
+
+Finalmente, se deja documentado todo el entorno técnico necesario para la creación, prueba y despliegue del sistema, incluyendo scripts, validadores, datos de prueba y ejemplos de consultas que reflejan escenarios reales de uso en la institución.
